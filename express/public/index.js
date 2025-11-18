@@ -17421,7 +17421,8 @@ const App = ()=>{
         className: "base-layout",
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _headerDefault.default), {
-                setCurrentPage: setCurrentPage
+                setCurrentPage: setCurrentPage,
+                currentPage: currentPage
             }, void 0, false, {
                 fileName: "src/App.js",
                 lineNumber: 13,
@@ -17475,7 +17476,7 @@ parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _button = require("./Button");
 var _buttonDefault = parcelHelpers.interopDefault(_button);
-const Header = ({ setCurrentPage })=>{
+const Header = ({ setCurrentPage, currentPage })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("header", {
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h1", {
@@ -17487,21 +17488,33 @@ const Header = ({ setCurrentPage })=>{
                 columnNumber: 4
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _buttonDefault.default), {
-                label: "Report a Lost Pet",
-                additionalClass: "primary",
-                onClick: ()=>setCurrentPage("report_lost_pet")
+                type: "button",
+                label: "Home",
+                additionalClass: `primary ${currentPage === "home" ? "current" : ""}`,
+                onClick: ()=>setCurrentPage("home")
             }, void 0, false, {
                 fileName: "src/components/Header.js",
                 lineNumber: 7,
                 columnNumber: 4
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _buttonDefault.default), {
-                label: "Search for My Lost Pet",
-                additionalClass: "primary",
+                type: "button",
+                label: "Report a Lost Pet",
+                additionalClass: `primary ${currentPage === "report_lost_pet" ? "current" : ""}`,
+                onClick: ()=>setCurrentPage("report_lost_pet")
+            }, void 0, false, {
+                fileName: "src/components/Header.js",
+                lineNumber: 13,
+                columnNumber: 4
+            }, undefined),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _buttonDefault.default), {
+                type: "button",
+                label: "Search for a Lost Pet",
+                additionalClass: `primary ${currentPage === "search_for_lost_pet" ? "current" : ""}`,
                 onClick: ()=>setCurrentPage("search_for_lost_pet")
             }, void 0, false, {
                 fileName: "src/components/Header.js",
-                lineNumber: 12,
+                lineNumber: 19,
                 columnNumber: 4
             }, undefined)
         ]
@@ -17532,8 +17545,9 @@ try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
-const Button = ({ label, additionalClass, onClick })=>{
+const Button = ({ type, label, additionalClass, onClick })=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+        type: type,
         className: `custom-button ${additionalClass}`,
         onClick: onClick,
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
@@ -20094,9 +20108,9 @@ const PetList = (props)=>{
                 lineNumber: 8,
                 columnNumber: 4
             }, undefined),
-            pets.map((pet)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _petCardDefault.default), {
+            pets.map((pet, index)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _petCardDefault.default), {
                     pet: pet
-                }, pet.id, false, {
+                }, index, false, {
                     fileName: "src/components/PetList.js",
                     lineNumber: 10,
                     columnNumber: 5
@@ -31854,20 +31868,41 @@ try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _react = require("react");
 var _lostPetForm = require("./LostPetForm");
+var _submittion = require("./Submittion");
+var _s = $RefreshSig$();
 const ReportLostPets = ()=>{
+    _s();
+    const [reportStatus, setReportStatus] = (0, _react.useState)(undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-        children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _lostPetForm.LostPetForm), {}, void 0, false, {
+        children: reportStatus === 'success' ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _submittion.Submittion), {
+            title: "Your Lost Pet Report Submitted Successfully",
+            sentence: "I hope you find your pet soon,,,"
+        }, void 0, false, {
             fileName: "src/components/ReportLostPets.js",
-            lineNumber: 6,
-            columnNumber: 4
-        }, undefined)
+            lineNumber: 12,
+            columnNumber: 8
+        }, undefined) : reportStatus === undefined ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _lostPetForm.LostPetForm), {
+            setReportStatus: setReportStatus
+        }, void 0, false, {
+            fileName: "src/components/ReportLostPets.js",
+            lineNumber: 14,
+            columnNumber: 9
+        }, undefined) : reportStatus === 'error' ? /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+            children: "There was an error submitting the lost pet report. Please try again."
+        }, void 0, false, {
+            fileName: "src/components/ReportLostPets.js",
+            lineNumber: 16,
+            columnNumber: 10
+        }, undefined) : null
     }, void 0, false, {
         fileName: "src/components/ReportLostPets.js",
-        lineNumber: 5,
+        lineNumber: 9,
         columnNumber: 3
     }, undefined);
 };
+_s(ReportLostPets, "kYkPtVgeYnBlToC1gdtsKpHW7Hs=");
 _c = ReportLostPets;
 exports.default = ReportLostPets;
 var _c;
@@ -31878,7 +31913,7 @@ $RefreshReg$(_c, "ReportLostPets");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"7INc2","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"csfVc","./LostPetForm":"7gRkb"}],"7gRkb":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"7INc2","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"csfVc","./LostPetForm":"7gRkb","react":"21dqq","./Submittion":"gyeYN"}],"7gRkb":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$f47c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$f47c.init();
 var prevRefreshReg = globalThis.$RefreshReg$;
@@ -31897,7 +31932,7 @@ var _input = require("./Input");
 var _radio = require("./Radio");
 var _textArea = require("./TextArea");
 var _s = $RefreshSig$();
-function LostPetForm() {
+function LostPetForm({ setReportStatus }) {
     _s();
     const [petName, setPetName] = (0, _react.useState)('');
     const [species, setSpecies] = (0, _react.useState)('');
@@ -31907,28 +31942,61 @@ function LostPetForm() {
     const [birthDate, setBirthDate] = (0, _react.useState)('');
     const [dateLost, setDateLost] = (0, _react.useState)('');
     const [ownerEmail, setOwnerEmail] = (0, _react.useState)('');
-    const [photo, setPhoto] = (0, _react.useState)('');
+    const [image, setImage] = (0, _react.useState)('');
     const [description, setDescription] = (0, _react.useState)('');
-    const handleSubmit = (e)=>{
+    const [errorMessage, setErrorMessage] = (0, _react.useState)({});
+    const handleSubmit = async (e)=>{
         e.preventDefault();
-        fetch('/api/pets/lost', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                petName,
-                species,
-                breed,
-                color,
-                sex,
-                birthDate,
-                dateLost,
-                ownerEmail,
-                photo,
-                description
-            })
+        console.log('Submitting lost pet report:', {
+            petName,
+            species,
+            breed,
+            color,
+            sex,
+            birthDate,
+            dateLost,
+            ownerEmail,
+            image,
+            description
         });
+        try {
+            const res = await fetch('/api/pets/lost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    petName,
+                    species,
+                    breed,
+                    color,
+                    sex,
+                    birthDate,
+                    dateLost,
+                    ownerEmail,
+                    image,
+                    description
+                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                console.log('Lost pet report submitted successfully:', data);
+                setReportStatus('success');
+                setPetName('');
+                setSpecies('');
+                setBreed('');
+                setColor('');
+                setSex('male');
+                setBirthDate('');
+                setDateLost('');
+                setOwnerEmail('');
+                setImage('');
+                setDescription('');
+            } else setErrorMessage(data.errors);
+        } catch (error) {
+            setReportStatus('error');
+            console.error('Error submitting lost pet report:', error);
+        }
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
         onSubmit: handleSubmit,
@@ -31937,55 +32005,59 @@ function LostPetForm() {
                 children: "Report Lost Pets"
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 44,
+                lineNumber: 81,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Pet Name",
+                label: "Pet Name*",
                 type: "text",
                 placeholder: "Enter pet's name",
                 value: petName,
-                onChange: (e)=>setPetName(e.target.value)
+                onChange: (e)=>setPetName(e.target.value),
+                errorMessage: errorMessage.petName
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 45,
+                lineNumber: 82,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Species",
+                label: "Species*",
                 type: "text",
                 placeholder: "Enter pet's species",
                 value: species,
-                onChange: (e)=>setSpecies(e.target.value)
+                onChange: (e)=>setSpecies(e.target.value),
+                errorMessage: errorMessage.species
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 46,
+                lineNumber: 83,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Breed",
+                label: "Breed*",
                 type: "text",
                 placeholder: "Enter pet's breed",
                 value: breed,
-                onChange: (e)=>setBreed(e.target.value)
+                onChange: (e)=>setBreed(e.target.value),
+                errorMessage: errorMessage.breed
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 47,
+                lineNumber: 84,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Color",
+                label: "Color*",
                 type: "text",
                 placeholder: "Enter pet's color",
                 value: color,
-                onChange: (e)=>setColor(e.target.value)
+                onChange: (e)=>setColor(e.target.value),
+                errorMessage: errorMessage.color
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 48,
+                lineNumber: 85,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _radio.Radio), {
-                label: "Sex",
+                label: "Sex*",
                 value: sex,
                 onChange: (e)=>setSex(e.target.value),
                 dataSet: [
@@ -32007,10 +32079,11 @@ function LostPetForm() {
                         value: "unknown",
                         label: "Unknown"
                     }
-                ]
+                ],
+                errorMessage: errorMessage.sex
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 49,
+                lineNumber: 86,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
@@ -32021,76 +32094,81 @@ function LostPetForm() {
                 onChange: (e)=>setBirthDate(e.target.value)
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 54,
+                lineNumber: 91,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Date Lost",
+                label: "Date Lost*",
                 type: "date",
                 placeholder: "Select date lost",
                 value: dateLost,
-                onChange: (e)=>setDateLost(e.target.value)
+                onChange: (e)=>setDateLost(e.target.value),
+                errorMessage: errorMessage.dateLost
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 55,
+                lineNumber: 92,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Owner Email",
-                type: "text",
+                label: "Owner Email*",
+                type: "email",
                 placeholder: "Enter owner's email",
                 value: ownerEmail,
-                onChange: (e)=>setOwnerEmail(e.target.value)
+                onChange: (e)=>setOwnerEmail(e.target.value),
+                errorMessage: errorMessage.ownerEmail
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 56,
+                lineNumber: 93,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _input.Input), {
-                label: "Photo",
-                type: "file",
+                label: "Photo*",
+                type: "text",
                 placeholder: "Enter photo URL",
-                value: photo,
-                onChange: (e)=>setPhoto(e.target.value)
+                value: image,
+                onChange: (e)=>setImage(e.target.value),
+                errorMessage: errorMessage.photo
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 57,
+                lineNumber: 94,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _textArea.TextArea), {
-                label: "Description",
+                label: "Description*",
                 placeholder: "Enter pet's description",
                 value: description,
-                onChange: (e)=>setDescription(e.target.value)
+                onChange: (e)=>setDescription(e.target.value),
+                errorMessage: errorMessage.description
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 58,
+                lineNumber: 95,
                 columnNumber: 4
             }, this),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
                 className: "form-actions",
                 children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _buttonDefault.default), {
+                    type: "submit",
                     label: "Submit",
                     additionalClass: "secondary",
                     onClick: ()=>{}
                 }, void 0, false, {
                     fileName: "src/components/LostPetForm.js",
-                    lineNumber: 60,
+                    lineNumber: 97,
                     columnNumber: 5
                 }, this)
             }, void 0, false, {
                 fileName: "src/components/LostPetForm.js",
-                lineNumber: 59,
+                lineNumber: 96,
                 columnNumber: 4
             }, this)
         ]
     }, void 0, true, {
         fileName: "src/components/LostPetForm.js",
-        lineNumber: 43,
+        lineNumber: 80,
         columnNumber: 3
     }, this);
 }
-_s(LostPetForm, "UQX9cKIWfXFA7TM0lb3L1GAKwl8=");
+_s(LostPetForm, "KC4+h7t3mFSjZujxR5G+koicCeY=");
 _c = LostPetForm;
 var _c;
 $RefreshReg$(_c, "LostPetForm");
@@ -32112,8 +32190,9 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Input", ()=>Input);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
-function Input({ label, type, value, onChange, placeholder }) {
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+function Input({ label, type, value, onChange, placeholder, errorMessage }) {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "input-group",
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                 htmlFor: label,
@@ -32123,18 +32202,39 @@ function Input({ label, type, value, onChange, placeholder }) {
                 lineNumber: 4,
                 columnNumber: 4
             }, this),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                type: type,
-                value: value,
-                onChange: onChange,
-                placeholder: placeholder
-            }, void 0, false, {
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "input-container",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
+                        type: type,
+                        value: value,
+                        onChange: onChange,
+                        placeholder: placeholder
+                    }, void 0, false, {
+                        fileName: "src/components/Input.js",
+                        lineNumber: 6,
+                        columnNumber: 5
+                    }, this),
+                    errorMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "error-message",
+                        children: errorMessage
+                    }, void 0, false, {
+                        fileName: "src/components/Input.js",
+                        lineNumber: 12,
+                        columnNumber: 22
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "src/components/Input.js",
                 lineNumber: 5,
                 columnNumber: 4
             }, this)
         ]
-    }, void 0, true);
+    }, void 0, true, {
+        fileName: "src/components/Input.js",
+        lineNumber: 3,
+        columnNumber: 3
+    }, this);
 }
 _c = Input;
 var _c;
@@ -32157,8 +32257,9 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "TextArea", ()=>TextArea);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
-function TextArea({ label, value, onChange, placeholder }) {
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+function TextArea({ label, value, onChange, placeholder, errorMessage }) {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "input-group",
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                 htmlFor: label,
@@ -32168,17 +32269,38 @@ function TextArea({ label, value, onChange, placeholder }) {
                 lineNumber: 4,
                 columnNumber: 4
             }, this),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("textarea", {
-                value: value,
-                onChange: onChange,
-                placeholder: placeholder
-            }, void 0, false, {
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "input-container",
+                children: [
+                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("textarea", {
+                        value: value,
+                        onChange: onChange,
+                        placeholder: placeholder
+                    }, void 0, false, {
+                        fileName: "src/components/TextArea.js",
+                        lineNumber: 6,
+                        columnNumber: 5
+                    }, this),
+                    errorMessage && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("span", {
+                        className: "error-message",
+                        children: errorMessage
+                    }, void 0, false, {
+                        fileName: "src/components/TextArea.js",
+                        lineNumber: 11,
+                        columnNumber: 22
+                    }, this)
+                ]
+            }, void 0, true, {
                 fileName: "src/components/TextArea.js",
                 lineNumber: 5,
                 columnNumber: 4
             }, this)
         ]
-    }, void 0, true);
+    }, void 0, true, {
+        fileName: "src/components/TextArea.js",
+        lineNumber: 3,
+        columnNumber: 3
+    }, this);
 }
 _c = TextArea;
 var _c;
@@ -32202,7 +32324,8 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Radio", ()=>Radio);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 function Radio({ label, dataSet, value, onChange }) {
-    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _jsxDevRuntime.Fragment), {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "input-group",
         children: [
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
                 children: label
@@ -32247,7 +32370,11 @@ function Radio({ label, dataSet, value, onChange }) {
                 columnNumber: 4
             }, this)
         ]
-    }, void 0, true);
+    }, void 0, true, {
+        fileName: "src/components/Radio.js",
+        lineNumber: 3,
+        columnNumber: 3
+    }, this);
 }
 _c = Radio;
 var _c;
@@ -32258,7 +32385,74 @@ $RefreshReg$(_c, "Radio");
   globalThis.$RefreshReg$ = prevRefreshReg;
   globalThis.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"7INc2","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"csfVc"}],"eSG2Q":[function(require,module,exports,__globalThis) {
+},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"7INc2","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"csfVc"}],"gyeYN":[function(require,module,exports,__globalThis) {
+var $parcel$ReactRefreshHelpers$554d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+$parcel$ReactRefreshHelpers$554d.init();
+var prevRefreshReg = globalThis.$RefreshReg$;
+var prevRefreshSig = globalThis.$RefreshSig$;
+$parcel$ReactRefreshHelpers$554d.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Submittion", ()=>Submittion);
+var _jsxDevRuntime = require("react/jsx-dev-runtime");
+var _button = require("./Button");
+var _buttonDefault = parcelHelpers.interopDefault(_button);
+function Submittion({ title, sentence }) {
+    return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+        className: "submittion",
+        children: [
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
+                children: title
+            }, void 0, false, {
+                fileName: "src/components/Submittion.js",
+                lineNumber: 6,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+                children: sentence
+            }, void 0, false, {
+                fileName: "src/components/Submittion.js",
+                lineNumber: 7,
+                columnNumber: 4
+            }, this),
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
+                className: "form-actions",
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _buttonDefault.default), {
+                    type: "button",
+                    label: "Go to Home",
+                    additionalClass: "secondary",
+                    onClick: ()=>{
+                        window.location.href = '/';
+                    }
+                }, void 0, false, {
+                    fileName: "src/components/Submittion.js",
+                    lineNumber: 9,
+                    columnNumber: 5
+                }, this)
+            }, void 0, false, {
+                fileName: "src/components/Submittion.js",
+                lineNumber: 8,
+                columnNumber: 4
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "src/components/Submittion.js",
+        lineNumber: 5,
+        columnNumber: 3
+    }, this);
+}
+_c = Submittion;
+var _c;
+$RefreshReg$(_c, "Submittion");
+
+  $parcel$ReactRefreshHelpers$554d.postlude(module);
+} finally {
+  globalThis.$RefreshReg$ = prevRefreshReg;
+  globalThis.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-js/src/esmodule-helpers.js":"7INc2","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"csfVc","./Button":"6cW0c"}],"eSG2Q":[function(require,module,exports,__globalThis) {
 var $parcel$ReactRefreshHelpers$4cd7 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 $parcel$ReactRefreshHelpers$4cd7.init();
 var prevRefreshReg = globalThis.$RefreshReg$;

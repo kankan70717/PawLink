@@ -6,8 +6,8 @@ const PetList = (props) => {
 	return (
 		<div className="pet-list">
 			<h2>{listName}</h2>
-			{pets.map((pet) => (
-				<PetCard key={pet.id} pet={pet} />
+			{pets.map((pet, index) => (
+				<PetCard key={index} pet={pet} />
 			))}
 		</div>
 	);

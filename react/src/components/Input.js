@@ -1,13 +1,16 @@
-export function Input({ label, type, value, onChange, placeholder }) {
+export function Input({ label, type, value, onChange, placeholder, errorMessage }) {
 	return (
-		<>
+		<div className="input-group">
 			<label htmlFor={label}>{label}</label>
-			<input
-				type={type}
-				value={value}
-				onChange={onChange}
-				placeholder={placeholder}
-			/>
-		</>
+			<div className="input-container">
+				<input
+					type={type}
+					value={value}
+					onChange={onChange}
+					placeholder={placeholder}
+				/>
+				{errorMessage && <span className="error-message">{errorMessage}</span>}
+			</div>
+		</div>
 	);
 }

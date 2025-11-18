@@ -57,10 +57,47 @@ const getLostPets = async (days) => {
 	return pets;
 }
 
+const createPet = (petData) => {
+	const {
+		petName,
+		species,
+		breed,
+		color,
+		sex,
+		birthDate,
+		dateLost,
+		image,
+		description
+	} = petData;
+
+	const sql = `
+		INSERT INTO lost_pets (pet_name, image, species, breed, color, sex, birth_date, description, status, lost_date, found_date, owner_id)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	`;
+
+	const result = db.prepare(sql).run(
+		petName,
+		image,
+		species,
+		breed,
+		color,
+		sex,
+		birthDate,
+		description,
+		'lost',
+		dateLost,
+		null,
+		'1'
+	);
+
+	return result;
+};
+
 const petsModel = {
 	getPets,
 	getLostPets,
-	getFoundPets
+	getFoundPets,
+	createPet
 };
 
 export default petsModel;

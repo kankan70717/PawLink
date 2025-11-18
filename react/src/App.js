@@ -10,7 +10,7 @@ export const App = () => {
 
 	return (
 		<div className="base-layout">
-			<Header setCurrentPage={setCurrentPage} />
+			<Header setCurrentPage={setCurrentPage} currentPage={currentPage} />
 
 			{currentPage === "home"
 				? <MainView />

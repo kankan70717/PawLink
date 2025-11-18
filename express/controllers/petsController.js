@@ -12,12 +12,12 @@ const getPetsController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching pets:', error);
-		res.status(500).json({ error: 'Internal Server Error' });
+		res.json({ error: 'Internal Server Error' });
 	}
 };
 
 const getFoundPetsController = async (req, res) => {
-	const days = parseInt(req.query.days) || 7;
+	const days = parseInt(req.query.days) || 30;
 
 	try {
 		const foundPets = await petsModel.getFoundPets(days);
@@ -25,12 +25,12 @@ const getFoundPetsController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching found pets:', error);
-		res.status(500).json({ error: 'Internal Server Error' });
+		res.json({ error: 'Internal Server Error' });
 	}
 };
 
 const getLostPetsController = async (req, res) => {
-	const days = parseInt(req.query.days) || 7;
+	const days = parseInt(req.query.days) || 30;
 
 	try {
 		const lostPets = await petsModel.getLostPets(days);
@@ -38,28 +38,41 @@ const getLostPetsController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching lost pets:', error);
-		res.status(500).json({ error: 'Internal Server Error' });
+		res.json({ error: 'Internal Server Error' });
 	}
 };
 
 const createPet = (req, res) => {
-	const { name, species } = req.body;
-	res.status(201).json({ message: `Pet ${name} of species ${species} created.` });
+	const { petName,
+		species,
+		breed,
+		color,
+		sex,
+		birthDate,
+		dateLost,
+		ownerEmail,
+		image,
+		description } = req.body;
+
+	try {
+		const result = petsModel.createPet({
+			petName,
+			species,
+			breed,
+			color,
+			sex,
+			birthDate: birthDate === '' ? null : birthDate,
+			dateLost,
+			ownerEmail,
+			image,
+			description
+		});
+		res.json({ message: `Pet ${petName} of species ${species} created.`, data: result });
+
+	} catch (error) {
+		console.error('Error creating pet:', error);
+		res.json({ error: 'Internal Server Error' });
+	}
 }
 
-const updatePet = (req, res) => {
-	const { id } = req.params;
-	const { name, species } = req.body;
-	res.json({ message: `Pet with id: ${id} updated to name: ${name}, species: ${species}` });
-}
-
-const deletePet = (req, res) => {
-	const { id } = req.params;
-	res.json({ message: `Pet with id: ${id} deleted.` });
-}
-
-const getBreeds = (req, res) => {
-	res.json({ message: 'List of Pet breeds' });
-};
-
-export { getPetsController, getLostPetsController, createPet, updatePet, deletePet, getBreeds, getFoundPetsController };
+export { getPetsController, getLostPetsController, createPet, getFoundPetsController };
