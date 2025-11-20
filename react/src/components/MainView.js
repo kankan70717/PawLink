@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import PetList from "./PetList";
+import Button from "./Button";
 
-const MainView = () => {
+const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 	const [foundPets, setFoundPets] = useState([]);
 	const [lostPets, setLostPets] = useState([]);
 	console.log("Found Pets:", foundPets);
@@ -23,7 +24,7 @@ const MainView = () => {
 
 		const fetchLostPets = async () => {
 			try {
-				const response = await fetch("/api/pets/lost?days=30");
+				const response = await fetch("/api/pets/lost?days=30&limit=3&offset=0");
 				const { message, data } = await response.json();
 				setLostPets(data);
 				console.log(message, data);
@@ -55,7 +56,10 @@ const MainView = () => {
 					</p>
 				</div>
 			</div>
-			<PetList pets={lostPets} listName="Recently Lost Pets in Last 30 Days" />
+			<PetList pets={lostPets} listName="Recently Lost Pets in Last 30 Days" setVisiblePetDetails={setVisiblePetDetails} />
+			<div>
+				<Button label="See More" additionalClass="secondary" onClick={() => { setCurrentPage("search_for_lost_pet"); }} />
+			</div>
 		</div>
 	);
 };
