@@ -9,8 +9,8 @@ app.listen('3000', () => {
 });
 
 app.use(express.static('public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
 app.use('/api', router);
 
 export const db = new DatabaseSync('./database/data.db', (err) => {

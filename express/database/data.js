@@ -30,7 +30,7 @@ db.serialize(() => {
 		['Harper Baker', '+1-012-123-2345', 'harper.baker@example.com']
 	];
 
-	const pets_descriptions=[
+	const pets_descriptions = [
 		'Small brown dog with a red collar.',
 		'Gray tabby cat with green eyes.',
 		'Black and white dog, very friendly.',
@@ -126,36 +126,38 @@ db.serialize(() => {
 	});
 
 	// insert sightings table
-	db.all(`SELECT pet_id, lost_date, found_date FROM lost_pets WHERE pet_id <= 13`, [], (err, petsRows) => {
+	db.all(`SELECT pet_id, lost_date, found_date FROM lost_pets WHERE pet_id <= 10`, [], (err, petsRows) => {
 		if (err) reject(err);
 
 		petsRows.forEach((pet, index) => {
-			const startDate = new Date(pet.lost_date);
-			const endDate = pet.found_date ? new Date(pet.found_date) : new Date();
 
-			const sightingDate = randomDate(startDate, endDate);
+			for (let i = 0; i < 3; i++) {
+				const startDate = new Date(pet.lost_date);
+				const endDate = pet.found_date ? new Date(pet.found_date) : new Date();
 
-			const sightingImage = index < 14 ? fs.readFileSync(`./image/pets-${index}.png`) : null;
+				const sightingDate = randomDate(startDate, endDate);
 
-			const locations = ["Vancouver", "Burnaby", "Richmond", "Surrey"];
-			const sightingLocation = locations[Math.floor(Math.random() * locations.length)];
-			const sightingDescription = `I saw similar pet near ${sightingLocation}`;
+				const sightingImage = index < 14 ? fs.readFileSync(`./image/pets-${index}.png`) : null;
 
-			const finder_id = Math.floor(Math.random() * 10 + 1);
+				const locations = ["Vancouver", "Burnaby", "Richmond", "Surrey"];
+				const sightingLocation = locations[Math.floor(Math.random() * locations.length)];
+				const sightingDescription = `I saw similar pet near ${sightingLocation}`;
 
-			db.prepare(`
+				const finder_id = Math.floor(Math.random() * 10 + 1);
+
+				db.prepare(`
 				INSERT INTO sightings
 				(sighting_image, sighting_date, sighting_location, sighting_description, lost_pet_id, finder_id)
 				VALUES (?, ?, ?, ?, ?, ?)
 			`).run(
-				sightingImage,
-				sightingDate,
-				sightingLocation,
-				sightingDescription,
-				pet.pet_id,
-				finder_id
-			);
-
+					sightingImage,
+					sightingDate,
+					sightingLocation,
+					sightingDescription,
+					pet.pet_id,
+					finder_id
+				);
+			}
 		});
 	});
 });

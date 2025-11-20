@@ -42,7 +42,7 @@ export const petsValidation = (req, res, next) => {
 
 	if (!dateLost || isNaN(Date.parse(dateLost))) {
 		errors.dateLost = 'Valid date lost is required.';
-	}else if (new Date(dateLost) > new Date()) {
+	} else if (new Date(dateLost) > new Date()) {
 		errors.dateLost = 'Date lost cannot be in the future.';
 	}
 
@@ -50,14 +50,22 @@ export const petsValidation = (req, res, next) => {
 		errors.ownerEmail = 'Valid owner email is required.';
 	}
 
-	if (!image || image.trim() === '') {
-		errors.image = 'Image cannot be an empty string.';
+	if (!image) {
+		errors.image = 'Image is required.';
+	} else {
+		const base64Data = image.includes(',') ? image.split(',')[1] : image;
+		const imageSizeInBytes = (base64Data.length * 3) / 4;
+
+		const MAX_SIZE = 200 * 1024;
+		if (imageSizeInBytes > MAX_SIZE) {
+			errors.image = 'Image size cannot exceed 200KB.';
+		}
 	}
 
 	if (!description || description.trim() === '') {
 		errors.description = 'Description cannot be empty.';
 	}
-	
+
 	if (Object.keys(errors).length > 0) {
 		return res.status(400).json({ errors });
 	}
