@@ -142,7 +142,8 @@ db.serialize(() => {
 				const startDate = new Date(pet.lost_date);
 				const endDate = pet.found_date ? new Date(pet.found_date) : new Date();
 
-				const sightingDate = randomDate(startDate, endDate);
+				const sightingObj = randomDate(startDate, endDate);
+				const sightingDate = sightingObj.toISOString().split('T')[0];
 
 				const sightingImage = index < 14 ? fs.readFileSync(`./image/pets-${index}.png`) : null;
 
