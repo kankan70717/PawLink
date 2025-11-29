@@ -16,6 +16,7 @@ const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 					startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
 					endDate: new Date().toISOString().split('T')[0],
 				});
+				console.log("Query Params:", queryParams.toString());
 				const response = await fetch(`/api/pets/lost-matched/number?${queryParams.toString()}`);
 				const { message, data } = await response.json();
 				setLostAndMatchedPetsNumber(data);

@@ -10,7 +10,7 @@ const postSightingController = async (req, res) => {
 			res.status(404).json({ error: 'Sighting not posted' });
 		}
 	} catch (error) {
-		console.error(`Error posting sighting with finder_id ${finder_id} and pet_id ${pet_id}:`, error);
+		console.error(`Error posting sighting:`, error);
 		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
