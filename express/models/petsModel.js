@@ -13,6 +13,10 @@ const getPetById = (petId) => {
 	`;
 	const rows = db.prepare(sql).all(petId);
 
+	if (!rows || rows.length === 0) {
+		return null;
+	}
+	
 	const base = rows[0];
 	
 	const pet = {
