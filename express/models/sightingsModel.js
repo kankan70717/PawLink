@@ -52,8 +52,8 @@ const postSighting = async (data) => {
 		}
 
 		const stmtSighting = db.prepare(`
-            INSERT INTO sightings (sighting_location, sighting_description, sighting_image, finder_id, pet_id)
-            VALUES (:sighting_location, :sighting_description, :sighting_image, :finder_id, :pet_id)
+            INSERT INTO sightings (sighting_location, sighting_description, sighting_image, finder_id, lost_pet_id)
+            VALUES (:sighting_location, :sighting_description, :sighting_image, :finder_id, :lost_pet_id)
         `);
 
 		const resultSighting = stmtSighting.run({
@@ -61,7 +61,7 @@ const postSighting = async (data) => {
 			sighting_description: sightingDescription,
 			sighting_image: imageBuffer,
 			finder_id: finder_id,
-			pet_id: petId
+			lost_pet_id: petId
 		});
 
 		db.exec("COMMIT");
