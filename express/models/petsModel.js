@@ -28,7 +28,7 @@ const getPetById = (petId) => {
 	const rows = db.prepare(sql).all(petId);
 
 	const base = rows[0];
-
+	
 	const pet = {
 		pet_id: base.pet_id,
 		pet_name: base.pet_name,
@@ -42,9 +42,10 @@ const getPetById = (petId) => {
 		image: base.image ? getImageURLFromBlob(base.image) : null,
 
 		owner: {
-			owner_name: base.owner_name,
-			phone: base.phone,
-			email: base.email,
+			id: base.owner_id,
+			name: base.owner_name,
+			phone: base.owner_phone,
+			email: base.owner_email,
 		},
 
 		sightings: rows
@@ -119,8 +120,33 @@ const getLostPets = async (days, limit, offset, filters) => {
 	return pets;
 };
 
-const getLostPetsNumber = async (startDate, endDate) => {
+const getLostAndMatchedPetsNumber = async (startDate, endDate) => {
+	let sql = `
+		SELECT status, COUNT(*) as count
+		FROM lost_pets
+		WHERE
+	`;
 
+	const params = [];
+
+	if (startDate) {
+		sql += ` ( (status = 'lost' AND lost_date >= ?) OR (status = 'matched' AND found_date >= ?) )`;
+		params.push(startDate, startDate);
+	}
+
+	if (endDate) {
+		sql += ` AND ( (status = 'lost' AND lost_date <= ?) OR (status = 'matched' AND found_date <= ?) )`;
+		params.push(endDate, endDate);
+	}
+
+	sql += ` GROUP BY status`;
+
+	const result = db.prepare(sql).all(...params);
+
+	return result;
+};
+
+const getLostPetsNumber = async (days) => {
 	let sql = `
 		SELECT COUNT(*) as count
 		FROM lost_pets
@@ -129,23 +155,16 @@ const getLostPetsNumber = async (startDate, endDate) => {
 
 	const params = [];
 
-	if (startDate) {
-		sql += ` AND lost_date >= ?`;
-		params.push(startDate);
-	}
-
-	if (endDate) {
-		sql += ` AND lost_date <= ?`;
-		params.push(endDate);
+	if (days) {
+		sql += ` AND lost_date >= DATE('now', ?)`;
+		params.push(`-${days} days`);
 	}
 
 	const result = db.prepare(sql).get(...params);
-
 	return result.count;
 };
 
-
-const createPet = (petData) => {
+const createPet = async (data) => {
 	const {
 		pet_name,
 		species,
@@ -154,40 +173,86 @@ const createPet = (petData) => {
 		sex,
 		birth_date,
 		lost_date,
-		owner_email,
 		image,
-		description
-	} = petData;
+		description,
+		owner_id,
+		owner_email,
+		owner_name,
+		owner_phone
+	} = data;
 
 	let imageBuffer = null;
 
 	if (image) {
 		const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-		imageBuffer = Buffer.from(base64Data, 'base64');
+		imageBuffer = Buffer.from(base64Data, "base64");
 	}
 
-	const sql = `
-		INSERT INTO lost_pets (pet_name, image, species, breed, color, sex, birth_date, description, status, lost_date, found_date, owner_id)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-	`;
+	try {
+		db.exec("BEGIN");
 
-	const result = db.prepare(sql).run(
-		pet_name,
-		imageBuffer,
-		species,
-		breed,
-		color,
-		sex,
-		birth_date,
-		description,
-		'lost',
-		lost_date || null,
-		null,
-		'1'
-	);
+		let ownerID = owner_id;
 
-	return result;
+		if (!ownerID) {
+			const stmtOwner = db.prepare(`
+                INSERT INTO owners (owner_name, owner_phone, owner_email)
+                VALUES (:owner_name, :owner_phone, :owner_email)
+            `);
+			const resultOwner = stmtOwner.run({
+				owner_name,
+				owner_phone,
+				owner_email
+			});
+
+			ownerID = resultOwner.lastInsertRowid;
+		}else{
+			const stmtUpdateOwner = db.prepare(`
+				UPDATE owners
+				SET owner_name = :owner_name,
+					owner_phone = :owner_phone
+				WHERE owner_id = :owner_id
+			`);
+			stmtUpdateOwner.run({
+				owner_name,
+				owner_phone,
+				owner_id: ownerID
+			});
+		}
+
+		const stmtPet = db.prepare(`
+            INSERT INTO lost_pets
+            (pet_name, image, species, breed, color, sex, birth_date, description, status, lost_date, found_date, owner_id)
+            VALUES (:pet_name, :image, :species, :breed, :color, :sex, :birth_date, :description, :status, :lost_date, :found_date, :owner_id)
+        `);
+
+		const resultPet = stmtPet.run({
+			pet_name,
+			image: imageBuffer,
+			species,
+			breed,
+			color,
+			sex,
+			birth_date,
+			description,
+			status: "lost",
+			lost_date: lost_date || null,
+			found_date: null,
+			owner_id: ownerID
+		});
+
+		db.exec("COMMIT");
+
+		return {
+			pet_id: resultPet.lastInsertRowid,
+			owner_id: ownerID,
+		};
+
+	} catch (err) {
+		db.exec("ROLLBACK");
+		throw err;
+	}
 };
+
 
 const updatePet = (petId, petData) => {
 	const {
@@ -246,6 +311,7 @@ const petsModel = {
 	getPets,
 	getLostPets,
 	getFoundPets,
+	getLostAndMatchedPetsNumber,
 	getLostPetsNumber,
 	createPet,
 	getPetById,

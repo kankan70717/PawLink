@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { ImCross } from "react-icons/im";
 import { FaRegEdit } from "react-icons/fa";
 import ReportLostPets from "./ReportLostPets";
+import ReportSightingForm from "./ReportSightingForm";
+import { CiImageOff } from "react-icons/ci";
 
 export const PetDetails = ({ id, setVisiblePetDetails }) => {
 	const [petDetails, setPetDetails] = useState(null);
 	const [edit, setEdit] = useState(false);
-	console.log("Pet Details:", petDetails);
+	const [addSighting, setAddSighting] = useState(false);
 
 	useEffect(() => {
 		try {
@@ -37,11 +39,14 @@ export const PetDetails = ({ id, setVisiblePetDetails }) => {
 						: (
 							<div className="pet-details-body">
 								<div>
-									{petDetails?.image &&
-										<div className="pet-details-img">
-											<img src={petDetails.image} alt={petDetails.pet_name} />
-										</div>
-									}
+									<div className="pet-details-img">
+										{
+											petDetails?.image
+												? <img src={petDetails.image} alt={petDetails.pet_name} />
+												: <CiImageOff size={128} />
+										}
+									</div>
+
 									<div className="row">
 										<div className="title">Age:</div>
 										<div>{petDetails?.age}</div>
@@ -76,54 +81,69 @@ export const PetDetails = ({ id, setVisiblePetDetails }) => {
 									</div>
 									<div className="row">
 										<div className="title">Owner Name:</div>
-										<div>{petDetails?.owner_name}</div>
+										<div>{petDetails?.owner.name}</div>
 									</div>
 									<div className="row">
 										<div className="title">Owner Email:</div>
-										<div>{petDetails?.owner_email}</div>
+										<div>{petDetails?.owner.email}</div>
 									</div>
 									<div className="row">
 										<div className="title">Owner Phone:</div>
-										<div>{petDetails?.owner_phone}</div>
+										<div>{petDetails?.owner.phone}</div>
 									</div>
 								</div>
 								<div>
-									<h2>Sightings</h2>
-									{petDetails?.sightings.length > 0 ? petDetails.sightings.map(sighting => (
-										<div key={sighting.sighting_id} className="sighting-card">
-											{sighting.sighting_image &&
+									<div className="sightings-header">
+										<h2>Sightings</h2>
+										<button className="add-sighting-btn" onClick={() => setAddSighting(true)}>Report Sighting</button>
+									</div>
+									{
+										addSighting &&
+										<ReportSightingForm petId={petDetails.pet_id} />
+									}
+									{
+										!addSighting && petDetails?.sightings.length > 0 ? petDetails.sightings.map(sighting => (
+											<div key={sighting.sighting_id} className="sighting-card">
+
 												<div className="sighting-img">
-													<img src={sighting.sighting_image} alt={`Sighting ${sighting.sighting_id}`} />
+													{
+														sighting.sighting_image ?
+															<img src={sighting.sighting_image} alt={`Sighting ${sighting.sighting_id}`} />
+															: <CiImageOff size={64} />
+													}
 												</div>
-											}
-											<div>
-												<div className="row">
-													<div className="title">Date:</div>
-													<div>{sighting.sighting_date}</div>
-												</div>
-												<div className="row">
-													<div className="title">Location:</div>
-													<div>{sighting.sighting_location}</div>
-												</div>
-												<div className="row">
-													<div className="title">Description:</div>
-													<div>{sighting.sighting_description}</div>
-												</div>
-												<div className="row">
-													<div className="title">Finder Name:</div>
-													<div>{sighting.finder_name}</div>
-												</div>
-												<div className="row">
-													<div className="title">Finder Email:</div>
-													<div>{sighting.finder_email}</div>
-												</div>
-												<div className="row">
-													<div className="title">Finder Phone:</div>
-													<div>{sighting.finder_phone}</div>
+
+												<div>
+													<div className="row">
+														<div className="title">Date:</div>
+														<div>{sighting.sighting_date}</div>
+													</div>
+													<div className="row">
+														<div className="title">Location:</div>
+														<div>{sighting.sighting_location}</div>
+													</div>
+													<div className="row">
+														<div className="title">Description:</div>
+														<div>{sighting.sighting_description}</div>
+													</div>
+													<div className="row">
+														<div className="title">Finder Name:</div>
+														<div>{sighting.finder_name}</div>
+													</div>
+													<div className="row">
+														<div className="title">Finder Email:</div>
+														<div>{sighting.finder_email}</div>
+													</div>
+													<div className="row">
+														<div className="title">Finder Phone:</div>
+														<div>{sighting.finder_phone}</div>
+													</div>
 												</div>
 											</div>
-										</div>
-									)) : <p>No sightings reported.</p>}
+										)) :
+											!addSighting &&
+											<p>No sightings reported.</p>
+									}
 								</div>
 							</div>
 						)

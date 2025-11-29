@@ -8,7 +8,7 @@ import { PetDetails } from "./components/PetDetails";
 
 export const App = () => {
 	const [currentPage, setCurrentPage] = useState("home");
-	const [visiblePetDetails, setVisiblePetDetails] = useState({pet_id: null, isVisible: false});
+	const [visiblePetDetails, setVisiblePetDetails] = useState({ pet_id: null, isVisible: false });
 
 	return (
 		<div className="base-layout">

@@ -84,11 +84,11 @@ const getLostPetsController = async (req, res) => {
 	}
 };
 
-const getLostPetsNumberController = async (req, res) => {
+const getLostAndMatchedPetsNumberController = async (req, res) => {
 	const { startDate, endDate } = req.query;
 
 	try {
-		const count = await petsModel.getLostPetsNumber(startDate, endDate);
+		const count = await petsModel.getLostAndMatchedPetsNumber(startDate, endDate);
 		res.json({ message: 'Number of lost pets', data: count });
 
 	} catch (error) {
@@ -97,38 +97,54 @@ const getLostPetsNumberController = async (req, res) => {
 	}
 };
 
-const createPetController = (req, res) => {
-	const { petName,
-		species,
-		breed,
-		color,
-		sex,
-		birthDate,
-		lostDate,
-		ownerEmail,
-		image,
-		description } = req.body;
+const getLostPetsNumberController = async (req, res) => {
+	const days = parseInt(req.query.days) || null;
 
-	console.log('birthDate in controller:', birthDate);
 	try {
-		const result = petsModel.createPet({
+		const count = await petsModel.getLostPetsNumber(days);
+		res.json({ message: 'Number of lost pets', data: count });
+
+	} catch (error) {
+		console.error('Error fetching number of lost pets:', error);
+		res.json({ error: 'Internal Server Error' });
+	}
+};
+
+const createPetController = async (req, res) => {
+	const {
+		petName, species, breed, color, sex,
+		birthDate, dateLost,
+		image, description,
+		ownerID, ownerEmail, ownerName, ownerPhone
+	} = req.body;
+
+	try {
+		const result = await petsModel.createPet({
 			pet_name: petName,
 			species,
 			breed,
 			color,
 			sex,
-			birth_date: birthDate === '' ? null : birthDate,
-			lost_date: lostDate === '' ? null : lostDate,
-			owner_email: ownerEmail,
+			birth_date: birthDate || null,
+			lost_date: dateLost || null,
 			image,
-			description
+			description,
+			owner_id: ownerID,
+			owner_email: ownerEmail,
+			owner_name: ownerName,
+			owner_phone: ownerPhone
 		});
-		res.json({ message: `Pet ${petName} of species ${species} created.`, data: result });
+
+		return res.json({
+			message: `Pet ${petName} of species ${species} created.`,
+			data: result
+		});
+
 	} catch (error) {
-		console.error('Error creating pet:', error);
-		res.json({ error: 'Internal Server Error' });
+		console.error("Error creating pet:", error);
+		return res.status(500).json({ error: "Internal Server Error" });
 	}
-}
+};
 
 const updatePetController = (req, res) => {
 	const { petName,
@@ -137,7 +153,7 @@ const updatePetController = (req, res) => {
 		color,
 		sex,
 		birthDate,
-		lostDate,
+		dateLost,
 		ownerEmail,
 		image,
 		description } = req.body;
@@ -150,7 +166,7 @@ const updatePetController = (req, res) => {
 		color,
 		sex,
 		birth_date: birthDate === '' ? null : birthDate,
-		lost_date: lostDate === '' ? null : lostDate,
+		lost_date: dateLost === '' ? null : dateLost,
 		owner_email: ownerEmail,
 		image,
 		description
@@ -168,4 +184,4 @@ const updatePetController = (req, res) => {
 	}
 }
 
-export { getPetsController, getLostPetsController, getLostPetsNumberController, createPetController, updatePetController, getFoundPetsController, getPetByIdController };
+export { getPetsController, getLostPetsController, getLostAndMatchedPetsNumberController, getLostPetsNumberController, createPetController, updatePetController, getFoundPetsController, getPetByIdController };

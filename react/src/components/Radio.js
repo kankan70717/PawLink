@@ -1,7 +1,7 @@
 export function Radio({ label, dataSet, value, onChange }) {
 	return (
 		<div className="input-group">
-			<label>{label}</label>
+			{label && <label>{label}</label>}
 			<div className="radio-set">
 				{
 					dataSet.map((data) => (

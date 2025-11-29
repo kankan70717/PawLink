@@ -7,9 +7,11 @@ export const petsValidation = (req, res, next) => {
 		sex,
 		birthDate,
 		dateLost,
-		ownerEmail,
 		image,
-		description
+		description,
+		ownerEmail,
+		ownerName,
+		ownerPhone,
 	} = req.body;
 
 	const errors = {};
@@ -46,7 +48,7 @@ export const petsValidation = (req, res, next) => {
 		errors.dateLost = 'Date lost cannot be in the future.';
 	}
 
-	if (!ownerEmail || color.trim() === '') {
+	if (!ownerEmail || ownerEmail.trim() === '') {
 		errors.ownerEmail = 'Valid owner email is required.';
 	}
 
@@ -64,6 +66,18 @@ export const petsValidation = (req, res, next) => {
 
 	if (!description || description.trim() === '') {
 		errors.description = 'Description cannot be empty.';
+	}
+
+	if (!ownerName || ownerName.trim() === '') {
+		errors.ownerName = 'Owner name is required.';
+	}
+
+	if (!ownerPhone || ownerPhone.trim() === '') {
+		errors.ownerPhone = 'Owner phone is required.';
+	}
+
+	if (!ownerEmail || ownerEmail.trim() === '') {
+		errors.ownerEmail = 'Owner email is required.';
 	}
 
 	if (Object.keys(errors).length > 0) {

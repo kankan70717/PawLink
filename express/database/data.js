@@ -10,9 +10,8 @@ db.prepare('DELETE FROM owners;').run();
 db.prepare('DELETE FROM sightings;').run();
 
 function randomDate(startDate, endDate) {
-	const date = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
-	return date.toISOString().split('T')[0];
-};
+	return new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+}
 
 db.serialize(() => {
 
@@ -99,7 +98,15 @@ db.serialize(() => {
 					: "matched"
 				: "matched";
 
-			const birth_date = randomDate(new Date("1999-01-01"), new Date(pet.date));
+			const ONE_DAY = 24 * 60 * 60 * 1000;
+			const birthDateObj = randomDate(new Date("1999-01-01"), new Date(pet.date));
+			const lostDateObj = randomDate(new Date(birthDateObj.getTime() + ONE_DAY), new Date());
+			const foundDateObj = status === 'matched' ? randomDate(new Date(lostDateObj.getTime() + ONE_DAY), new Date()) : null;
+
+			const birth_date = birthDateObj.toISOString().split('T')[0];
+			const lost_date = lostDateObj.toISOString().split('T')[0];
+			const found_date = foundDateObj ? foundDateObj.toISOString().split('T')[0] : null;
+
 
 			const image = index < 14 ? fs.readFileSync("./image/pets-" + index + ".png") : null;
 
@@ -116,8 +123,8 @@ db.serialize(() => {
 				birth_date, // birth date
 				description,
 				status,
-				pet.date, // lost date
-				status == 'matched' ? randomDate(new Date(pet.date), new Date()) : undefined, // matched date
+				lost_date, // lost date
+				status == 'matched' ? found_date : undefined, // matched date
 				owner_id
 			);
 		} catch (error) {

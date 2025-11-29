@@ -3,18 +3,22 @@ import PetList from "./PetList";
 import Button from "./Button";
 
 const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
-	const [foundPets, setFoundPets] = useState([]);
+	const [lostAndMatchedPetsNumber, setLostAndMatchedPetsNumber] = useState([]);
 	const [lostPets, setLostPets] = useState([]);
-	console.log("Found Pets:", foundPets);
+	console.log("Lost and Matched Pets Number:", lostAndMatchedPetsNumber);
 	console.log("Lost Pets:", lostPets);
 
 	useEffect(() => {
 
-		const fetchFoundPets = async () => {
+		const fetchLostAndMatchedPetsNumber = async () => {
 			try {
-				const response = await fetch("/api/pets/found?days=30");
+				const queryParams = new URLSearchParams({
+					startDate: new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0],
+					endDate: new Date().toISOString().split('T')[0],
+				});
+				const response = await fetch(`/api/pets/lost-matched/number?${queryParams.toString()}`);
 				const { message, data } = await response.json();
-				setFoundPets(data);
+				setLostAndMatchedPetsNumber(data);
 				console.log(message, data);
 
 			} catch (error) {
@@ -34,7 +38,7 @@ const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 			}
 		}
 
-		fetchFoundPets();
+		fetchLostAndMatchedPetsNumber();
 		fetchLostPets();
 	}, []);
 
@@ -45,15 +49,27 @@ const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 					<h2>Find & Report<br />Lost Pets</h2>
 					<h3>Welcome to the Lost Pet Finder App</h3>
 				</div>
-				<div className="mv-found">
-					<h3>
-						<div className="big">Number of pets found</div>
-						<div>in the last 30 days</div>
-					</h3>
-					<p>
-						<span className="big">{foundPets.length} </span>
-						pets found
-					</p>
+				<div className="mv-status">
+					<div className="mv-found">
+						<h3>
+							<div className="big">Number of pets found</div>
+							<div>in the last 30 days</div>
+						</h3>
+						<p>
+							<span className="big">{lostAndMatchedPetsNumber?.find(r => r.status === 'matched')?.count} </span>
+							pets found
+						</p>
+					</div>
+					<div className="mv-lost">
+						<h3>
+							<div className="big">Number of pets lost</div>
+							<div>in the last 30 days</div>
+						</h3>
+						<p>
+							<span className="big">{lostAndMatchedPetsNumber?.find(r => r.status === 'lost')?.count} </span>
+							pets lost
+						</p>
+					</div>
 				</div>
 			</div>
 			<PetList pets={lostPets} listName="Recently Lost Pets in Last 30 Days" setVisiblePetDetails={setVisiblePetDetails} />
