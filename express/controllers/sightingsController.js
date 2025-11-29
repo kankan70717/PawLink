@@ -5,7 +5,7 @@ const postSightingController = async (req, res) => {
 	try {
 		const sighting = await sightingsModel.postSighting(req.body);
 		if (sighting) {
-			res.json({ message: `Details of finder with email: ${email}`, data: sighting });
+			res.json({ message: `Details of finder with email:`, data: sighting });
 		} else {
 			res.status(404).json({ error: 'Sighting not posted' });
 		}
