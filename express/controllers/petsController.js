@@ -5,6 +5,13 @@ const getPetByIdController = async (req, res) => {
 
 	try {
 		const pet = await petsModel.getPetById(petId);
+		
+		if (!pet) {
+			return res.status(404).json({
+				error: `Pet with ID ${petId} not found`
+			});
+		}
+
 		res.json({ message: `Details of pet ID: ${petId}`, data: pet });
 
 	} catch (error) {
