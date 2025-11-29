@@ -1,9 +1,8 @@
 import express from 'express';
-import {  createPetController, getFoundPetsController, getLostPetsController, getLostAndMatchedPetsNumberController, getPetByIdController, getPetsController, updatePetController, getLostPetsNumberController } from '../controllers/petsController.js';
+import {  createPetController, getLostPetsController, getLostAndMatchedPetsNumberController, getPetByIdController, updatePetController, getLostPetsNumberController } from '../controllers/petsController.js';
 import { petsValidation } from '../middleware/petsValidation.js';
 const petsRouter = express.Router();
 
-petsRouter.get('/found', getFoundPetsController);
 petsRouter.get('/lost', getLostPetsController);
 petsRouter.get('/lost/number', getLostPetsNumberController);
 petsRouter.get('/:id', getPetByIdController);

@@ -13,19 +13,6 @@ const getPetByIdController = async (req, res) => {
 	}
 }
 
-const getFoundPetsController = async (req, res) => {
-	const days = parseInt(req.query.days) || 30;
-
-	try {
-		const foundPets = await petsModel.getFoundPets(days);
-		res.json({ message: 'Number of found pets', data: foundPets });
-
-	} catch (error) {
-		console.error('Error fetching found pets:', error);
-		res.json({ error: 'Internal Server Error' });
-	}
-};
-
 const getLostPetsController = async (req, res) => {
 	const days = parseInt(req.query.days) || null;
 	const limit = parseInt(req.query.limit) || 10;
@@ -168,4 +155,4 @@ const updatePetController = (req, res) => {
 	}
 }
 
-export { getPetsController, getLostPetsController, getLostAndMatchedPetsNumberController, getLostPetsNumberController, createPetController, updatePetController, getFoundPetsController, getPetByIdController };
+export { getLostPetsController, getLostAndMatchedPetsNumberController, getLostPetsNumberController, createPetController, updatePetController, getPetByIdController };

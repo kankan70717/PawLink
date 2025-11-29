@@ -53,27 +53,6 @@ const getPetById = (petId) => {
 	return pet;
 };
 
-const getFoundPets = async (days) => {
-
-	const sql = `
-		SELECT *
-    	FROM lost_pets
-    	WHERE status = 'matched'
-      		AND found_date >= DATE('now', ?)
-	`;
-
-	const pets = db
-		.prepare(sql)
-		.all(`-${days} days`);
-
-	pets.forEach((pet) => {
-		if (pet.image) {
-			pet.image = getImageURLFromBlob(pet.image);
-		}
-	});
-	return pets;
-};
-
 const getLostPets = async (days, limit, offset, filters) => {
 	let sql = `
 		SELECT *
@@ -295,7 +274,6 @@ const updatePet = (petId, petData) => {
 
 const petsModel = {
 	getLostPets,
-	getFoundPets,
 	getLostAndMatchedPetsNumber,
 	getLostPetsNumber,
 	createPet,
