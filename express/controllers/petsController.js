@@ -1,21 +1,5 @@
 import petsModel from '../models/petsModel.js';
 
-const getPetsController = async (req, res) => {
-
-	try {
-		const page = parseInt(req.query.page) || 1;
-		const limit = parseInt(req.query.limit) || 10;
-		const skip = (page - 1) * limit;
-
-		const pets = await petsModel.getPets(limit, skip);
-		res.json({ message: "Pets List", data: pets });
-
-	} catch (error) {
-		console.error('Error fetching pets:', error);
-		res.json({ error: 'Internal Server Error' });
-	}
-};
-
 const getPetByIdController = async (req, res) => {
 	const petId = req.params.id;
 

@@ -1,20 +1,6 @@
 import { db } from "../app.js";
 import { getImageURLFromBlob } from "../utils/imageUtils.js";
 
-const getPets = (limit = 5, skip = 0) => {
-
-	const pets = db
-		.prepare('SELECT * FROM lost_pets LIMIT ? OFFSET ?')
-		.all(limit, skip);
-
-	pets.forEach((pet) => {
-		if (pet.image) {
-			pet.image = getImageURLFromBlob(pet.image);
-		}
-	});
-	return pets;
-};
-
 const getPetById = (petId) => {
 
 	const sql = `
@@ -308,7 +294,6 @@ const updatePet = (petId, petData) => {
 
 
 const petsModel = {
-	getPets,
 	getLostPets,
 	getFoundPets,
 	getLostAndMatchedPetsNumber,

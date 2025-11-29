@@ -3,7 +3,6 @@ import {  createPetController, getFoundPetsController, getLostPetsController, ge
 import { petsValidation } from '../middleware/petsValidation.js';
 const petsRouter = express.Router();
 
-petsRouter.get('/', getPetsController);
 petsRouter.get('/found', getFoundPetsController);
 petsRouter.get('/lost', getLostPetsController);
 petsRouter.get('/lost/number', getLostPetsNumberController);
