@@ -39,7 +39,7 @@ export function LostPetForm({ setReportStatus, petDetails, title, action }) {
 
 		try {
 			if (action === 'edit') {
-				const res = await fetch(`/api/pets/lost/${petDetails.pet_id}`, {
+				const res = await fetch(`/api/v1/pets/lost/${petDetails.pet_id}`, {
 					method: 'PUT',
 					headers: {
 						'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export function LostPetForm({ setReportStatus, petDetails, title, action }) {
 				return;
 
 			} else {
-				const res = await fetch('/api/pets/lost', {
+				const res = await fetch('/api/v1/pets/lost', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export function LostPetForm({ setReportStatus, petDetails, title, action }) {
 
 	const searchOwnerByEmail = async (email) => {
 		try {
-			const res = await fetch(`/api/owners/info?email=${encodeURIComponent(email)}`);
+			const res = await fetch(`/api/v1/owners/info?email=${encodeURIComponent(email)}`);
 			const data = await res.json();
 
 			if (res.ok) {

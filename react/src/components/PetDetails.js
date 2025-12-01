@@ -13,7 +13,7 @@ export const PetDetails = ({ id, setVisiblePetDetails }) => {
 	useEffect(() => {
 		try {
 			const fetchPetDetails = async () => {
-				const response = await fetch(`/api/pets/${id}`);
+				const response = await fetch(`/api/v1/pets/${id}`);
 				const { message, data } = await response.json();
 				setPetDetails(data);
 				console.log(message, data);

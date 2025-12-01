@@ -21,7 +21,7 @@ const ReportSightingForm = ({ petId }) => {
 
 	const searchFinderByEmail = async (email) => {
 		try {
-			const res = await fetch(`/api/finders/info?email=${encodeURIComponent(email)}`);
+			const res = await fetch(`/api/v1/finders/info?email=${encodeURIComponent(email)}`);
 			const json = await res.json();
 			console.log("Finder search response:", json);
 
@@ -57,7 +57,7 @@ const ReportSightingForm = ({ petId }) => {
 		}
 
 		try {
-			const res = await fetch('/api/sightings', {
+			const res = await fetch('/api/v1/sightings', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

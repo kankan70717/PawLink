@@ -23,7 +23,7 @@ const SearchPets = ({ setVisiblePetDetails }) => {
 	useEffect(() => {
 		const fetchLostPetsNumber = async () => {
 			try {
-				const response = await fetch("/api/pets/lost/number");
+				const response = await fetch("/api/v1/pets/lost/number");
 				const { message, data } = await response.json();
 				console.log(message, data);
 				setLostPetsNumber(data);
@@ -62,7 +62,7 @@ const SearchPets = ({ setVisiblePetDetails }) => {
 	const fetchLostPets = async (pageNumber = page) => {
 		try {
 			const queryParams = createQueryString(searchForm, pageNumber);
-			const response = await fetch(`/api/pets/lost?${queryParams}`);
+			const response = await fetch(`/api/v1/pets/lost?${queryParams}`);
 			const { message, data } = await response.json();
 			console.log(message, data);
 			setLostPets(data);

@@ -17,7 +17,7 @@ const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 					endDate: new Date().toISOString().split('T')[0],
 				});
 				console.log("Query Params:", queryParams.toString());
-				const response = await fetch(`/api/pets/lost-matched/number?${queryParams.toString()}`);
+				const response = await fetch(`/api/v1/pets/lost-matched/number?${queryParams.toString()}`);
 				const { message, data } = await response.json();
 				setLostAndMatchedPetsNumber(data);
 				console.log(message, data);
@@ -29,7 +29,7 @@ const MainView = ({ setCurrentPage, setVisiblePetDetails }) => {
 
 		const fetchLostPets = async () => {
 			try {
-				const response = await fetch("/api/pets/lost?days=30&limit=3&offset=0");
+				const response = await fetch("/api/v1/pets/lost?days=30&limit=3&offset=0");
 				const { message, data } = await response.json();
 				setLostPets(data);
 				console.log(message, data);
