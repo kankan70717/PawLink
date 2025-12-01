@@ -16,7 +16,7 @@ const getPetByIdController = async (req, res) => {
 
 	} catch (error) {
 		console.error(`Error fetching pet with ID ${petId}:`, error);
-		res.json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 }
 
@@ -58,7 +58,7 @@ const getLostPetsController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching lost pets:', error);
-		res.json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
 
@@ -71,7 +71,7 @@ const getLostAndMatchedPetsNumberController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching number of lost pets:', error);
-		res.json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
 
@@ -84,7 +84,7 @@ const getLostPetsNumberController = async (req, res) => {
 
 	} catch (error) {
 		console.error('Error fetching number of lost pets:', error);
-		res.json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 };
 
@@ -158,7 +158,7 @@ const updatePetController = (req, res) => {
 		res.json({ message: `Pet ${petName} of species ${species} updated.`, data: result });
 	} catch (error) {
 		console.error('Error updating pet:', error);
-		res.json({ error: 'Internal Server Error' });
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 }
 

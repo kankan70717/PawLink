@@ -7,7 +7,7 @@ const postSightingController = async (req, res) => {
 		if (sighting) {
 			res.json({ message: `Details of finder with email:`, data: sighting });
 		} else {
-			res.status(404).json({ error: 'Sighting not posted' });
+            res.status(400).json({ error: 'Sighting not posted. Invalid data.' });
 		}
 	} catch (error) {
 		console.error(`Error posting sighting:`, error);
