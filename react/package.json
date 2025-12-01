@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"dev": "npx parcel watch src/index.js --dist-dir ../express/public",
-		"start": "npx parcel build src/index.js --dist-dir ../express/public"
+		"start": "npx parcel watch src/index.js --dist-dir ../express/public"
 	},
 	"keywords": [],
 	"author": "",
